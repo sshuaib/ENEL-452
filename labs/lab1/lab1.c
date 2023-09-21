@@ -10,10 +10,10 @@ void delay(uint32_t delay)
 
 void gpioInit(void)
 {
-	GPIOA->CRH &= ~(GPIO_CRL_CNF5);
+	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
 	
 	GPIOA->CRL |=  GPIO_CRL_MODE5_0 |  GPIO_CRL_MODE5_1;
-	GPIOA->CRL &= ~GPIO_CRL_CNF6_0 &~ GPIO_CRL_CNF6_1;
+	GPIOA->CRL &= ~GPIO_CRL_CNF5_0 &~ GPIO_CRL_CNF5_1;
 }
 
 void ledOn(void)
