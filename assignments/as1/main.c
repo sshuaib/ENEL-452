@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -22,34 +21,47 @@ int main() {
         }
 
         // Check if the input contains fewer than 4 floating-point numbers (real and imaginary parts).
-        if (sscanf(input, " %*c %lf %lf %lf %lf", &valueInput1.real, &valueInput1.imag, &valueInput2.real, &valueInput2.imag) < 4) {
+        if (sscanf(input, " %*c %lf %lf %lf %lf", &valueInput1.real, 
+        &valueInput1.imag, &valueInput2.real, &valueInput2.imag) < 4) {
             fprintf(stdout, "error code: 2: missing arguments\n");
-            error = true; // Set the error flag and continue to the next iteration.
+            error = true; 
+            // Set the error flag and continue to the next iteration.
             continue;
-        } else if (sscanf(input, " %*c %lf %lf %lf %lf %100s", &valueInput1.real, &valueInput1.imag, &valueInput2.real, &valueInput2.imag, input) > 4) {
+        } else if (sscanf(input, " %*c %lf %lf %lf %lf %100s", &valueInput1.real,
+        &valueInput1.imag, &valueInput2.real, &valueInput2.imag, input) > 4) {
             fprintf(stdout, "error code: 3: extra arguments\n");
-            error = true; // Set the error flag and continue to the next iteration.
+            error = true; 
+            // Set the error flag and continue to the next iteration.
             continue;
-        } else if (sscanf(input, " %*c %lf %lf %lf %lf", &valueInput1.real, &valueInput1.imag, &valueInput2.real, &valueInput2.imag) == 4) {
+        } else if (sscanf(input, " %*c %lf %lf %lf %lf", &valueInput1.real,
+        &valueInput1.imag, &valueInput2.real, &valueInput2.imag) == 4) {
             // If the input is valid and contains four floating-point numbers, perform complex number operations.
             switch (choice) {
                 case 'a':
                 case 'A':
-                    result = addComplex(valueInput1, valueInput2); // Call a function to add two complex numbers.
+                    result = addComplex(valueInput1, valueInput2); 
+                    // Call a function to add two complex numbers.
                     fprintf(stdout, "%lf + j %lf\n", result.real, result.imag); // Print the result.
-                    continue; // Continue to the next iteration of the loop.
+                    continue; 
+                    // Continue to the next iteration of the loop.
 
                 case 's':
                 case 'S':
-                    result = subtractComplex(valueInput1, valueInput2); // Call a function to subtract two complex numbers.
-                    fprintf(stdout, "%lf + j %lf\n", result.real, result.imag); // Print the result.
-                    continue; // Continue to the next iteration of the loop.
+                    result = subtractComplex(valueInput1, valueInput2); 
+                    // Call a function to subtract two complex numbers.
+                    fprintf(stdout, "%lf + j %lf\n", result.real, result.imag); 
+                    // Print the result.
+                    continue; 
+                    // Continue to the next iteration of the loop.
 
                 case 'm':
                 case 'M':
-                    result = multiplyComplex(valueInput1, valueInput2); // Call a function to multiply two complex numbers.
-                    fprintf(stdout,  "%lf + j %lf\n", result.real, result.imag); // Print the result.
-                    continue; // Continue to the next iteration of the loop.
+                    result = multiplyComplex(valueInput1, valueInput2); 
+                    // Call a function to multiply two complex numbers.
+                    fprintf(stdout,  "%lf + j %lf\n", result.real, result.imag); 
+                    // Print the result.
+                    continue; 
+                    // Continue to the next iteration of the loop.
 
                 case 'd':
                 case 'D':
@@ -74,104 +86,3 @@ int main() {
 
     return 0; // Exit the program.
 }
-=======
-#include <stdio.h>
-#include <ctype.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <string.h>
-#include <stdlib.h>
-#include "calculator.h"
-
-int main() {
-    Complex valueInput1, valueInput2, result;
-    char input[100];
-    char x[200];
-    char choice;
-    bool error = false;
-
-    //fprintf("Enter exp (a + bi): ");
-    //scanf("%lf %lf", &valueInput2.real, &valueInput2.imag);
-
-    while (1) {
-        fprintf(stderr, "Enter exp: ");
-        fgets (input, sizeof(input), stdin);
-        sscanf(input, " %c ", &choice);
-
-        if(choice == 'q' || choice == 'Q' )
-        {
-            break;
-        }
-
-        if (sscanf(input, " %*c %lf %lf %lf %lf", &valueInput1.real, &valueInput1.imag, &valueInput2.real, &valueInput2.imag) < 4) 
-        { 
-            fprintf(stdout, "error code: 2: missing arguments\n");
-            error = true;
-            continue;
-        }
-
-        else if (sscanf(input, " %*c %lf %lf %lf %lf %100s", &valueInput1.real, &valueInput1.imag, &valueInput2.real, &valueInput2.imag, input) > 4)
-        {
-            fprintf(stdout, "error code: 3: extra arguments\n");
-            error = true;
-            continue;
-        }
-
-        else if (sscanf(input, " %*c %lf %lf %lf %lf", &valueInput1.real, &valueInput1.imag, &valueInput2.real, &valueInput2.imag) == 4)
-        {
-            switch (choice) {
-            case 'a':
-            case 'A':
-                result = addComplex(valueInput1, valueInput2);
-                fprintf(stdout, "%lf + j %lf\n", result.real, result.imag);
-                continue;
-
-            case 's':
-            case 'S':
-                result = subtractComplex(valueInput1, valueInput2);
-                fprintf(stdout, "%lf + j %lf\n", result.real, result.imag);
-                continue;
-
-            case 'm':
-            case 'M':
-                result = multiplyComplex(valueInput1, valueInput2);
-                fprintf(stdout,  "%lf + j %lf\n", result.real, result.imag);
-                continue;
-
-            case 'd':
-            case 'D':
-                    if(valueInput2.real == 0 & valueInput2.imag == 0)
-                    {
-                        fprintf(stdout, "error code: 4: divide by zero\n" );
-                        error = true;
-                        continue;
-                    }
-
-                result = divideComplex(valueInput1, valueInput2);
-                fprintf(stdout, "%lf + j %lf\n", result.real, result.imag);
-                continue;
-
-            default:
-                error = true;
-                fprintf(stdout, "error code: 1: illegal command\n");
-                continue;
-        }
-        /*if(!error) 
-        {
-            if (result.imag >= 0)
-            {
-                fprintf(stdout,"%.6lf + j %.6lf\n", result.real, result.imag);
-            }
-             else
-            {
-                fprintf(stdout,"%.6lf - j %.6lf\n", result.real, -result.imag);
-            }   
-        }*/
-        error = false;
-        
-    }
-
-    return 0;
-}
-}
->>>>>>> b54e369aa17e571f302bebc9d1f8b4f41a690f64
