@@ -6,9 +6,9 @@
 
 int main() {
     Complex valueInput1, valueInput2, result; // Declare variables to store complex numbers.
-    char input[100]; // Initialize a character array to store user input.
-    char choice; // Initialize a character to store the user's choice.
-    bool error = false; // Initialize a boolean variable to track errors.
+    char input[100]; //Initialize a character array to store user input.
+    char choice; //Initialize a character to store the user's choice.
+    bool error = false; //Initialize a boolean variable to track errors.
 
     // Prompt the user for input in a loop until they choose to quit ('q' or 'Q').
     while (1) {
