@@ -2,6 +2,7 @@ Objective:
 - Create a complex calculator capable of performing addition, subtraction, multiplication and division. 
 - Should also be capable of error handling in the case too many errors, too little errors, division by zero, or an illegal character entered.
 - Should be capable of pressing character, q or Q,in order to quit the program
+
 How to run:
 - Compile program in snoopy (main.c and calculator.c)
 - Enter exponent values using operator characters - a or A, s or S, m or M, d or D for addition, subtraction, multiplication or division.
