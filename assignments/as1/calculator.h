@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -22,3 +23,22 @@ Complex multiplyComplex(Complex valueInput1, Complex valueInput2);
 
 // Function to divide one complex number by another.
 Complex divideComplex(Complex valueInput1, Complex valueInput2);
+=======
+#include <stdio.h>
+#include <ctype.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct {
+    double real;
+    double imag;
+} Complex;
+
+// Function prototypes for complex number operations
+Complex addComplex(Complex valueInput1, Complex valueInput2);
+Complex subtractComplex(Complex valueInput1, Complex valueInput2);
+Complex multiplyComplex(Complex valueInput1, Complex valueInput2);
+Complex divideComplex(Complex valueInput1, Complex valueInput2);
+>>>>>>> b54e369aa17e571f302bebc9d1f8b4f41a690f64
