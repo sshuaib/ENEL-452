@@ -20,10 +20,10 @@ int main()
 
 			if (receive() == 0x50)
 			{
-				ledON();
+				led1ON();
 			}
 			else
-				ledOFF();
+				led1OFF();
 		}
 			
 }
