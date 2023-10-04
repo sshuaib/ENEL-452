@@ -1,9 +1,7 @@
 #include "stm32f10x.h"
 
 void clockInit(void);
-void tim3_IO_init(void);
-void tim3GPIOSetup(uint16_t dCycleVal);
-void configUSARTsetup(void);
+void openSerial(void);
 void send(uint8_t);
 uint8_t receive(void);
 void delay(uint32_t);
