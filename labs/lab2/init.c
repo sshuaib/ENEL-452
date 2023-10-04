@@ -45,52 +45,42 @@ void clockInit(void){
     while (((RCC->CFGR) & (RCC_CFGR_SW_PLL | RCC_CFGR_SWS_PLL)) == 0);
             
 //Enable Port A and B *
-      RCC->APB2ENR |= RCC_APB2ENR_IOPAEN |RCC_APB2ENR_IOPBEN | RCC_APB2ENR_AFIOEN | RCC_APB2ENR_ADC1EN |RCC_APB2ENR_IOPCEN;
+      RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_AFIOEN;
 			
 // Configure PA2 (TX) as alternate function output push-pull, max speed 50 MHz
-GPIOA->CRL &= ~(GPIO_CRL_CNF2 | GPIO_CRL_MODE2);
+GPIOA->CRL &= ~(GPIO_CRL_CNF2_0);
 GPIOA->CRL |= GPIO_CRL_CNF2_1 | GPIO_CRL_MODE2;
 
 // Configure PA3 (RX) as input with pull-up/pull-down
-GPIOA->CRL &= ~(GPIO_CRL_CNF3 | GPIO_CRL_MODE3);
-GPIOA->CRL |= GPIO_CRL_CNF3_0;
-GPIOA->ODR |= GPIO_ODR_ODR3; 	// Pull-up
+GPIOA->CRL &= ~(GPIO_CRL_CNF3_0 | GPIO_CRL_MODE3);
+GPIOA->CRL |= GPIO_CRL_CNF3_1;
 }
 
-
-void tim3_IO_init(void){
-      
-      RCC->APB1ENR |= RCC_APB1ENR_TIM3EN | RCC_APB2ENR_IOPAEN;
-      GPIOA->CRL |= GPIO_CRL_CNF6_1 | GPIO_CRL_MODE6;
-      GPIOA->CRL &= ~GPIO_CRL_CNF6_0;
-
-}
-
-void configUSARTsetup(void) {
-	
-			RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_AFIOEN | RCC_APB2ENR_USART1EN;		//clock config
+void serialOpen(void) {
+			//clock config
 			RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
-			GPIOA->CRH |= GPIO_CRH_CNF9_1 | GPIO_CRH_MODE9;																	//port config
-			GPIOA->CRH &= GPIO_CRH_CNF9_0;
-			GPIOA->CRH |= GPIO_CRH_CNF10_1 | GPIO_CRH_MODE10;
-			GPIOA->CRH &= GPIO_CRH_CNF10_0;
 	
-			USART1->BRR |= 0x271;
+			USART1->BRR |= 0x138;
 			USART1->CR1 |= USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
 }
 			
-void send(uint8_t info)
+int send(uint8_t info)
 {
+	if(!(USART2->CR1 & USART_CR1_UE))
+	{
+		return 1;
+	}
 	if(!(USART1->SR & USART_SR_TXE))
 	{
+		
 	}
 	USART1->DR = info;
+	return 0;
 }
 
 uint8_t receive(void)
 {
 	uint8_t data;
-	
 	if((USART1->SR & USART_SR_RXNE))
 	{
 		data = USART1->DR;
