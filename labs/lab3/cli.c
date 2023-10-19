@@ -6,6 +6,7 @@
 
 #include "usart.h"
 #include "cli.h"
+#include "init.h"
 
 void CLI_Transmit(uint8_t *pData, uint16_t Size, uint32_t timeout)
 {
@@ -15,7 +16,6 @@ void CLI_Transmit(uint8_t *pData, uint16_t Size, uint32_t timeout)
     }
 }
 
-/** For receiving data from the host terminal */
 void CLI_Receive(uint8_t *pData, uint16_t Size, uint32_t timeout)
 {
     uint16_t i = 0;
