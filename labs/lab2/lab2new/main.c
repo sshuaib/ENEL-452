@@ -19,7 +19,6 @@ int main()
 
     // Initialize LEDs
     ledinit();
-		//sendByte(0x21);
 	
 	  print_message("This program allows you to turn the on-board LED on and off,\n");
     print_message("\r\n as well as check the status of the LED.\n");
@@ -42,13 +41,11 @@ int main()
             {
                 led1ON();
                 print_message("\r\n >>  ");
-                break;
             }
             else if (strcmp(command, "Turn off") == 0)
             {
                 led1OFF();
                 print_message("\r\n >>  ");
-                break;
             }
             else if (strcmp(command, "Status") == 0)
             {
@@ -61,7 +58,6 @@ int main()
                     print_message("\r\n Status: LED is off\n");
                 }
                 print_message("\r\n >>  ");
-                break;
             }
             else if (strcmp(command, "Help") == 0)
             {
@@ -73,13 +69,11 @@ int main()
                 print_message("\r\n Enter 'Status' to find out the status of LED\n");
                 print_message("\r\n Enter 'Quit' to quit the program\n");
                 print_message("\r\n >>  ");
-                break;
             }
             else
             {
                 print_message("\r\n Invalid Entry\n");
                 print_message("\r\n >>  ");
-                break;
             }
     }
 }
