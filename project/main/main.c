@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdbool.h>
+
 //#include "stm32F103RB.h"
 #include "FreeRTOS.h"
 #include "queue.h"
@@ -12,7 +14,7 @@
 #define mainEXTERNAL_TASK_PRIORITY 		(tskIDLE_PRIORITY + 1 )
 #define mainINTERNAL_TASK_PRIORITY 		(tskIDLE_PRIORITY + 1 )
 #define CLI_TASK_PRIORITY		(tskIDLE_PRIORITY + 2 )
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY 16
+//#define configMAX_SYSCALL_INTERRUPT_PRIORITY 16
 
 
 #define QUEUE_LENGTH 10
@@ -27,7 +29,7 @@ static void vExternalTask( void * parameters);
 static void vInternalTask( void * parameters);
 static void vCLITask( void * parameters);
 void USART2_IRQHandler(void);
-void EXTI0_IRQHandler(void);
+void EXTI15_10_IRQHandler(void);
 
 int main(void)
 {
@@ -274,26 +276,28 @@ void USART2_IRQHandler(void)
         {
             xQueueSendToFrontFromISR(usartQueue, &rx_data, NULL);
         }
-
         // Clear the RXNE flag
         USART2->SR &= ~USART_SR_RXNE;
     }
 }
-
-void EXTI0_IRQHandler(void)
+bool push_button = true;
+void EXTI15_10_IRQHandler(void)
 {
-    if (EXTI->PR & EXTI_PR_PR0)
-    {
-        // Clear the interrupt flag
-        EXTI->PR |= EXTI_PR_PR0;
+		if (EXTI->PR & EXTI_PR_PR13)
+		{
+			if(push_button == true)
+		{
+		led_on();
+		 newStatus("EMERGENCY");
+		push_button = false;
+		}
+		else if(push_button == false)
+		{
+		led_off();
+		newStatus("NOW OPERATIONAL");
+		push_button = true;
+		}
+		}
 
-        // Your interrupt handling code here
-
-        // For example, turn off elevator functions
-        newStatus("Emergency Stop: Elevator functions are disabled");
-        // You might want to add more actions depending on your requirements
-
-        // You can also reset the system or take other actions if needed
-        NVIC_SystemReset();
-    }
+EXTI->PR |= EXTI_PR_PR13;
 }

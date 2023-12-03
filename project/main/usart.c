@@ -14,6 +14,7 @@ void timer2_init(uint32_t timeout)
     TIM2->CR1 |= TIM_CR1_CEN; /* Enable Timer2 */
     TIM2->EGR |= TIM_EGR_UG; /* Reinitialize the counter */
     TIM2->PSC = 0x1DAF; /* Divide 76 MHz by 7600 (PSC+1), PSC_CLK = 10000 Hz, 1 count = 0.1 ms */
+
     TIM2->ARR = timeout; /* 100 counts = 10 ms or 100 Hz */
     TIM2->SR = 0;
     TIM2->CR1 |= TIM_CR1_ARPE | TIM_CR1_CEN; /* Enable Timer3 */
@@ -36,7 +37,8 @@ void serial_open(void)
     
     USART2->CR1 |= USART_CR1_UE; /* Enable USART */
     
-    USART2->BRR |= 0x0139; /* Set baud rate to 9600 */
+    //USART2->BRR = (19 <<4) | (9 & 0xF); /* Set baud rate to 115200 */
+		USART2->BRR = 0x139; 
     
     USART2->CR1 |= USART_CR1_RE | USART_CR1_TE | USART_CR1_UE; /* Enable receiving and transmitting */
     USART2->CR2 &= ~USART_CR2_STOP; /* 1 stop bit */

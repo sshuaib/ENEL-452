@@ -24,24 +24,14 @@ void led_init(void)
 
 void initInterrupt(void)
 {
-	   // Configure PA0 as input with pull-up
-    GPIOA->CRL &= ~GPIO_CRL_MODE0;
-    GPIOA->CRL &= ~GPIO_CRL_CNF0;
-    GPIOA->CRL |= GPIO_CRL_CNF0_1; // Input pull-up
-	
-		// Connect EXTI0 line to PA0
-    AFIO->EXTICR[0] &= ~AFIO_EXTICR1_EXTI0;
-
-    // Configure EXTI0 to trigger on rising edge
-    EXTI->RTSR |= EXTI_RTSR_TR0;
-
-    // Enable EXTI0 interrupt
-    EXTI->IMR |= EXTI_IMR_MR0;
-
-    // Set priority for EXTI0_IRQn
-    NVIC_SetPriority(EXTI0_IRQn, configMAX_SYSCALL_INTERRUPT_PRIORITY);
-    NVIC_EnableIRQ(EXTI0_IRQn);
+RCC->APB2ENR |= RCC_APB2ENR_IOPCEN | RCC_APB2ENR_AFIOEN;
+//AFIO->EXTICR[3] &= ~AFIO_EXTICR4_EXTI13;
+AFIO->EXTICR[3] |= AFIO_EXTICR4_EXTI13_PC;
+EXTI->IMR |= EXTI_IMR_MR13; // Unmask PC13 as interrupt source
+EXTI->FTSR |= EXTI_FTSR_TR13;
+NVIC->ISER[1] = NVIC_ISER_SETENA_8;
 }
+
 
 void redled_on(void)
 {
