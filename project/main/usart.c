@@ -1,25 +1,29 @@
-/*Salman Shuaib
-	200374212
-	ENEL 452
-	Lab 5
-*/
+/* Salman Shuaib 200374212 ENEL 452 Lab 5 */
 
 #include "usart.h" /* Include USART library */
-#include "cli.h" /* Include CLI library */
+#include "cli.h"   /* Include CLI library */
 #include <string.h>
 
+/**
+ * @brief Initializes Timer2 for timeout functionality.
+ * 
+ * @param timeout Timeout value in timer counts.
+ */
 void timer2_init(uint32_t timeout)
 {
     RCC->APB1ENR |= RCC_APB1ENR_TIM2EN; /* Enable Timer2 */
-    TIM2->CR1 |= TIM_CR1_CEN; /* Enable Timer2 */
-    TIM2->EGR |= TIM_EGR_UG; /* Reinitialize the counter */
-    TIM2->PSC = 0x1DAF; /* Divide 76 MHz by 7600 (PSC+1), PSC_CLK = 10000 Hz, 1 count = 0.1 ms */
+    TIM2->CR1 |= TIM_CR1_CEN;           /* Enable Timer2 */
+    TIM2->EGR |= TIM_EGR_UG;            /* Reinitialize the counter */
+    TIM2->PSC = 0x1DAF;                  /* Divide 76 MHz by 7600 (PSC+1), PSC_CLK = 10000 Hz, 1 count = 0.1 ms */
 
-    TIM2->ARR = timeout; /* 100 counts = 10 ms or 100 Hz */
+    TIM2->ARR = timeout;                 /* 100 counts = 10 ms or 100 Hz */
     TIM2->SR = 0;
     TIM2->CR1 |= TIM_CR1_ARPE | TIM_CR1_CEN; /* Enable Timer3 */
 }
 
+/**
+ * @brief Configures USART2 for serial communication.
+ */
 void usart_config(void)
 {
     RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_AFIOEN; /* Enable AFIO and Port A */
@@ -31,14 +35,16 @@ void usart_config(void)
     GPIOA->CRL &= ~GPIO_CRL_CNF3_0 & ~GPIO_CRL_MODE3;
 }
 
+/**
+ * @brief Opens the USART2 for communication.
+ */
 void serial_open(void)
 {
     RCC->APB1ENR |= RCC_APB1ENR_USART2EN; /* Enable USART2 clock */
     
     USART2->CR1 |= USART_CR1_UE; /* Enable USART */
     
-    //USART2->BRR = (19 <<4) | (9 & 0xF); /* Set baud rate to 115200 */
-		USART2->BRR = 0x139; 
+    USART2->BRR = 0x139; /* Set baud rate to 115200 */
     
     USART2->CR1 |= USART_CR1_RE | USART_CR1_TE | USART_CR1_UE; /* Enable receiving and transmitting */
     USART2->CR2 &= ~USART_CR2_STOP; /* 1 stop bit */
@@ -47,6 +53,9 @@ void serial_open(void)
     NVIC_EnableIRQ(USART2_IRQn); /* Enable USART2 interrupt */
 }
 
+/**
+ * @brief Closes the USART2 communication.
+ */
 void serial_close(void)
 {
     RCC->APB1ENR &= ~RCC_APB1ENR_USART2EN; /* Disable USART2 clock */
@@ -54,6 +63,14 @@ void serial_close(void)
     USART2->BRR = 0; /* Clear USART2 configuration */
 }
 
+/**
+ * @brief Sends a byte of data over USART2 with a specified timeout.
+ * 
+ * @param data The byte of data to be sent.
+ * @param timeout Timeout value in timer counts.
+ * 
+ * @return 0 on success, 1 on USART not enabled, 2 on timeout or transmission error.
+ */
 int send_data(uint8_t data, uint32_t timeout)
 {
     if (!(USART2->CR1 & USART_CR1_UE))
@@ -81,6 +98,13 @@ int send_data(uint8_t data, uint32_t timeout)
     return 0; /* Return success code 0 */
 }
 
+/**
+ * @brief Receives a byte of data from USART2 with a specified timeout.
+ * 
+ * @param timeout Timeout value in timer counts.
+ * 
+ * @return Received byte on success, 2 on timeout or reception error.
+ */
 uint8_t receive_data(uint32_t timeout)
 {
     uint8_t value;
